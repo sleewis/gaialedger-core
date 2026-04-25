@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GaiaLedger — The Earth's Currency</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:  #1a3a2a;
+      --green-mid:   #2d6a4f;
+      --green-light: #52b788;
+      --gold:        #c9a84c;
+      --cream:       #f4f1e8;
+      --text:        #1c1c1c;
+      --muted:       #5a6670;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: var(--text);
+      background: var(--cream);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(26, 58, 42, 0.95);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-logo {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--green-light);
+      letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: var(--gold); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+    nav ul a {
+      color: #c8d8ce;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    nav ul a:hover { color: var(--green-light); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      background:
+        radial-gradient(ellipse at 60% 40%, rgba(82,183,136,0.15) 0%, transparent 60%),
+        linear-gradient(160deg, var(--green-dark) 0%, #0f2419 100%);
+      color: #fff;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(82,183,136,0.2);
+      border: 1px solid var(--green-light);
+      color: var(--green-light);
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+    }
+
+    #hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.01em;
+    }
+    #hero h1 span { color: var(--gold); }
+
+    #hero p {
+      max-width: 580px;
+      font-size: 1.15rem;
+      color: #b8cdc4;
+      margin-bottom: 2.5rem;
+    }
+
+    .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .btn-primary  { background: var(--green-light); color: var(--green-dark); }
+    .btn-outline  { border: 2px solid var(--green-light); color: var(--green-light); }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 4rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .stat { text-align: center; }
+    .stat-value { font-size: 1.8rem; font-weight: 800; color: var(--gold); }
+    .stat-label { font-size: 0.85rem; color: #8aada0; text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* ── SECTIONS ── */
+    section { padding: 5rem 2rem; }
+
+    .container { max-width: 1080px; margin: 0 auto; }
+
+    .section-label {
+      display: block;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .lead {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 620px;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: #fff; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-top: 3rem;
+    }
+    .about-text p { color: var(--muted); margin-top: 1rem; }
+    .about-visual {
+      background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      color: #fff;
+      text-align: center;
+    }
+    .about-visual .big-icon { font-size: 5rem; line-height: 1; }
+    .about-visual p { margin-top: 1rem; color: #b8d4c4; font-size: 0.95rem; }
+
+    /* ── FEATURES ── */
+    #features { background: var(--cream); }
+    .features-intro { margin-bottom: 3rem; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 2rem;
+      border: 1px solid #e4e4d8;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .feature-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-3px); }
+    .feature-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+    .feature-card h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
+    .feature-card p { font-size: 0.95rem; color: var(--muted); }
+
+    /* ── COMMUNITY ── */
+    #community {
+      background: linear-gradient(160deg, var(--green-dark), #0f2419);
+      color: #fff;
+      text-align: center;
+    }
+    #community .section-label { color: var(--green-light); }
+    #community h2 { color: #fff; }
+    #community .lead { color: #9bbdaf; margin: 0 auto 2.5rem; }
+    .community-links {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── HOW IT WORKS ── */
+    #how { background: #fff; }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+      counter-reset: steps;
+    }
+    .step {
+      position: relative;
+      padding: 1.5rem;
+      border-radius: 12px;
+      background: var(--cream);
+      counter-increment: steps;
+    }
+    .step::before {
+      content: counter(steps);
+      display: block;
+      width: 2.2rem; height: 2.2rem;
+      background: var(--green-mid);
+      color: #fff;
+      border-radius: 50%;
+      font-weight: 800;
+      font-size: 1rem;
+      line-height: 2.2rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .step h3 { margin-bottom: 0.4rem; }
+    .step p { font-size: 0.92rem; color: var(--muted); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--green-dark);
+      color: #7a9e8c;
+      text-align: center;
+      padding: 2.5rem 2rem;
+      font-size: 0.9rem;
+    }
+    footer a { color: var(--green-light); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    .footer-logo { font-size: 1.2rem; font-weight: 700; color: var(--green-light); margin-bottom: 0.5rem; }
+    .footer-logo span { color: var(--gold); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 680px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      nav ul { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Gaia<span>Ledger</span></div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#community">Community</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-badge">Decentralized &bull; Community-driven &bull; Earth-aligned</div>
+  <h1>The Ledger for a<br><span>Sustainable Future</span></h1>
+  <p>GaiaLedger is a community-founded cryptocurrency built on transparent, decentralized principles — honoring the planet that sustains us all.</p>
+  <div class="btn-group">
+    <a href="#how" class="btn btn-primary">Get started</a>
+    <a href="#about" class="btn btn-outline">Learn more</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-value">Open</div>
+      <div class="stat-label">Source</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">P2P</div>
+      <div class="stat-label">Network</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">0%</div>
+      <div class="stat-label">Central control</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">Global</div>
+      <div class="stat-label">Community</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <span class="section-label">About GaiaLedger</span>
+        <h2>A currency rooted in community &amp; the planet</h2>
+        <p>GaiaLedger is an open-source cryptocurrency initiative led by the <strong>GaiaLedger Community Foundation</strong>. Inspired by Gaia — the ancient concept of Earth as a living, interconnected system — we believe money should serve people and the planet, not the other way around.</p>
+        <p>Built on a proven, battle-tested codebase, GaiaLedger combines the security of decentralized ledger technology with a community that cares deeply about where this technology takes us.</p>
+      </div>
+      <div class="about-visual">
+        <div class="big-icon">🌍</div>
+        <p>Powered by a global network of nodes, maintained by people who believe in a fairer financial future.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <div class="features-intro">
+      <span class="section-label">Why GaiaLedger</span>
+      <h2>Built different, by design</h2>
+      <p class="lead">Every design decision in GaiaLedger reflects a commitment to openness, resilience, and community governance.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🔓</div>
+        <h3>Fully Open Source</h3>
+        <p>Every line of code is publicly available and auditable. No black boxes, no hidden agendas — just transparent software anyone can inspect.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Decentralized Network</h3>
+        <p>No single point of failure. The GaiaLedger network runs on thousands of independent nodes spread across the globe.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>Proven Security</h3>
+        <p>Based on battle-tested cryptographic principles, GaiaLedger inherits years of security research and improvements from the broader blockchain community.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌱</div>
+        <h3>Community Governed</h3>
+        <p>The GaiaLedger Community Foundation ensures the project stays true to its values. Major decisions are made collaboratively, not unilaterally.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💻</div>
+        <h3>Multi-Platform Wallets</h3>
+        <p>Official wallets are available for Windows, macOS, and Linux — so you can participate no matter what device you use.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📖</div>
+        <h3>Documented &amp; Accessible</h3>
+        <p>From technical whitepapers to beginner guides, we believe knowledge should be shared freely with everyone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="container">
+    <span class="section-label">Get started</span>
+    <h2>How to join the network</h2>
+    <p class="lead">Getting started with GaiaLedger is straightforward — no technical background required.</p>
+    <div class="steps">
+      <div class="step">
+        <h3>Download the wallet</h3>
+        <p>Get the official GaiaLedger wallet for your operating system from our GitHub releases page.</p>
+      </div>
+      <div class="step">
+        <h3>Set up your address</h3>
+        <p>Create your personal wallet address. Your keys stay on your device — you are always in control.</p>
+      </div>
+      <div class="step">
+        <h3>Connect to the network</h3>
+        <p>The wallet automatically connects to the peer-to-peer network and begins syncing the blockchain.</p>
+      </div>
+      <div class="step">
+        <h3>Join the community</h3>
+        <p>Introduce yourself, ask questions, and help shape the future of GaiaLedger alongside the foundation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section id="community">
+  <div class="container">
+    <span class="section-label">Community</span>
+    <h2>Grow with us</h2>
+    <p class="lead">GaiaLedger is as strong as its community. Whether you are a developer, a curious newcomer, or a longtime believer in decentralization — there is a place for you here.</p>
+    <div class="community-links">
+      <a href="https://github.com/gaialedger" class="btn btn-outline">GitHub</a>
+      <a href="https://gaialedger.io" class="btn btn-primary">Official site</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Gaia<span>Ledger</span></div>
+  <p>
+    &copy; 2026 GaiaLedger Community Foundation &mdash;
+    <a href="https://gaialedger.io">gaialedger.io</a>
+  </p>
+  <p style="margin-top:0.5rem; font-size:0.8rem;">
+    GaiaLedger is an open-source project. This is not financial advice.
+  </p>
+</footer>
+
+</body>
+</html>
