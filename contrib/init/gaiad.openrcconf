@@ -1,0 +1,33 @@
+# /etc/conf.d/gaiad: config file for /etc/init.d/gaiad
+
+# Config file location
+#BLACKMORED_CONFIGFILE="/etc/gaia/gaia.conf"
+
+# What directory to write pidfile to?  (created and owned by $BLACKMORED_USER)
+#BLACKMORED_PIDDIR="/var/run/gaiad"
+
+# What filename to give the pidfile
+#BLACKMORED_PIDFILE="${BLACKMORED_PIDDIR}/gaiad.pid"
+
+# Where to write gaiad data (be mindful that the blockchain is large)
+#BLACKMORED_DATADIR="/var/lib/gaiad"
+
+# User and group to own gaiad process
+#BLACKMORED_USER="gaia"
+#BLACKMORED_GROUP="gaia"
+
+# Path to gaiad executable
+#BLACKMORED_BIN="/usr/bin/gaiad"
+
+# Nice value to run gaiad under
+#BLACKMORED_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+#BLACKMORED_OPTS=""
+
+# The timeout in seconds OpenRC will wait for gaiad to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+BLACKMORED_SIGTERM_TIMEOUT=600

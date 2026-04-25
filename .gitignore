@@ -1,0 +1,7 @@
+*.zip
+*.exe
+*.out
+*.log
+gaia-qt
+build/
+.DS_Store
